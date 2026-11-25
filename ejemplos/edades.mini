@@ -1,0 +1,7 @@
+varutepsa edad = 22;
+
+ifapruebemeinge (edad >= 18) {
+    printbecas("Estas aprobado");
+} elsenomerepruebe {
+    printbecas("Estas reprobado");
+}

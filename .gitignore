@@ -1,0 +1,16 @@
+# Entorno virtual
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de salida generados
+salida.py
+
+# IDEs y editores
+.vscode/
+.idea/
