@@ -1,74 +1,82 @@
-
 import sys
 from pathlib import Path
 from lark import Lark
+from lark.exceptions import LarkError
 
 from semantic import analizar_semantica, SemanticError
 from translator import traducir_programa
 
-
-# Rutas del proyecto
 BASE_DIR = Path(__file__).resolve().parent
 
-# Verificar que se haya indicado un archivo
-if len(sys.argv) < 2:
-    print("Error: Debes indicar un archivo .mini")
-    sys.exit(1)
 
-# Obtener el archivo de entrada
-ARCHIVO_ENTRADA = Path(sys.argv[1])
-
-if not ARCHIVO_ENTRADA.is_absolute():
-    ARCHIVO_ENTRADA = BASE_DIR / ARCHIVO_ENTRADA
-
-# Archivo de salida
-ARCHIVO_SALIDA = BASE_DIR / "salida.py"
+def crear_analizador():
+    """Carga la gramatica formal y crea el parser LALR."""
+    ruta_gramatica = BASE_DIR / "grammar.lark"
+    with open(ruta_gramatica, "r", encoding="utf-8") as archivo:
+        gramatica = archivo.read()
+    return Lark(gramatica, parser="lalr", start="start")
 
 
-# 1. Cargar la gramatica
-with open(BASE_DIR / "grammar.lark", "r", encoding="utf-8") as archivo:
-    gramatica = archivo.read()
+def compilar(archivo_entrada: Path, archivo_salida: Path = None) -> bool:
+    """Ejecuta el pipeline completo de compilacion."""
+    if archivo_salida is None:
+        archivo_salida = BASE_DIR / "salida.py"
 
+    if not archivo_entrada.exists():
+        print(f"Error: El archivo de entrada '{archivo_entrada}' no existe.")
+        return False
 
-# 2. Crear el analizador
-parser = Lark(
-    gramatica,
-    parser="lalr",
-    start="start"
-)
-
-
-try:
-    # Leer el codigo fuente
-    with open(ARCHIVO_ENTRADA, "r", encoding="utf-8") as archivo:
+    with open(archivo_entrada, "r", encoding="utf-8") as archivo:
         codigo = archivo.read()
 
-    # 3. Analisis sintactico
-    arbol = parser.parse(codigo)
-    
+    try:
+        # 1. Analisis sintactico (Lexer + Parser)
+        parser = crear_analizador()
+        arbol = parser.parse(codigo)
+        print("1. Analisis sintactico: Correcto")
 
-    print("1. Analisis sintactico: Correcto")
+        # 2. Analisis semantico (Tabla de simbolos y chequeo de tipos)
+        analizar_semantica(arbol)
 
-    # 4. Analisis semantico
-    analizar_semantica(arbol)
+        # 3. Generacion de codigo (Traduccion a Python)
+        codigo_python = traducir_programa(arbol)
+        print("\n2. Traduccion a Python: Correcta")
+        print("\nCodigo Python generado:")
+        print(codigo_python)
 
-    # 5. Traduccion
-    codigo_python = traducir_programa(arbol)
+        # 4. Guardar archivo generado
+        with open(archivo_salida, "w", encoding="utf-8") as archivo:
+            archivo.write(codigo_python)
 
-    print("\n2. Traduccion a Python: Correcta")
-    print("\nCodigo Python generado:")
-    print(codigo_python)
+        print(f"Archivo {archivo_salida.name} generado correctamente.")
+        return True
 
-    # 6. Guardar el resultado
-    with open(ARCHIVO_SALIDA, "w", encoding="utf-8") as archivo:
-        archivo.write(codigo_python)
+    except LarkError as error:
+        print("\nError sintactico:")
+        print(error)
+        return False
 
-    print("Archivo salida.py generado correctamente.")
+    except SemanticError as error:
+        print("\nError semantico:")
+        print(error)
+        return False
 
-except SemanticError as error:
-    print("\nError semantico:")
-    print(error)
+    except Exception as error:
+        print("\nError durante el procesamiento:")
+        print(error)
+        return False
 
-except Exception as error:
-    print("\nError durante el procesamiento:")
-    print(error)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Uso: python main.py <archivo.mini>")
+        print("Ejemplo: python main.py ejemplos/edades.mini")
+        sys.exit(1)
+
+    archivo = Path(sys.argv[1])
+    if not archivo.is_absolute():
+        archivo = BASE_DIR / archivo
+
+    exito = compilar(archivo)
+    if not exito:
+        sys.exit(1)

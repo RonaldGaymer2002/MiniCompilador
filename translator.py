@@ -95,7 +95,7 @@ def traducir_sentencia(nodo, nivel=0):
         lineas.extend(contenido_if)
 
         # Comprobar si existe una alternativa
-        if len(nodo.children) > 2:
+        if len(nodo.children) > 2 and nodo.children[2] is not None:
             lineas.append(f"{espacio}else:")
 
             bloque_else = nodo.children[2]

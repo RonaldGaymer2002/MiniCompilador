@@ -70,9 +70,9 @@ def verificar_expresion(nodo):
         izquierda = verificar_expresion(nodo.children[0])
         derecha = verificar_expresion(nodo.children[2])
 
-        if izquierda != derecha:
+        if izquierda is None or derecha is None or izquierda != derecha:
             raise SemanticError(
-                "No se pueden comparar tipos de datos diferentes."
+                "No se pueden comparar tipos de datos diferentes o invalidos."
             )
 
         return "boolean"
@@ -98,13 +98,23 @@ def analizar_sentencia(nodo):
 
         tipo = verificar_expresion(expresion)
 
+        if tipo is None:
+            raise SemanticError(
+                f"La expresion asignada a '{nombre}' no es valida."
+            )
+
         tabla_simbolos[nombre] = tipo
 
     # Impresion de resultados
     elif tipo_nodo == "print_stmt":
 
         expresion = nodo.children[0]
-        verificar_expresion(expresion)
+        tipo = verificar_expresion(expresion)
+
+        if tipo is None:
+            raise SemanticError(
+                "La expresion en printbecas no es valida."
+            )
 
     # Condicionales
     elif tipo_nodo == "if_stmt":
