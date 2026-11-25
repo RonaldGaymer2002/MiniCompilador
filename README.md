@@ -77,7 +77,10 @@ minicompilador/
 ├── salida.py           # Código Python resultante generado tras compilar
 │
 ├── ejemplos/
-│   └── edades.mini     # Archivo de prueba de ejemplo
+│   ├── edades.mini          # Ejemplo básico de condicionales
+│   ├── promedio.mini        # Cálculo aritmético y precedencia de operadores
+│   ├── descuento.mini       # Operaciones de resta y comparaciones lógicas
+│   └── error_semantico.mini # Ejemplo para defensa (demostración de chequeo de tipos)
 │
 └── README.md           # Documentación del proyecto
 ```

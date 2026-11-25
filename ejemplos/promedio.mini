@@ -1,0 +1,14 @@
+// Ejemplo 2: Calculo de promedio ponderado con precedencia de operadores
+varutepsa nota1 = 70;
+varutepsa nota2 = 85;
+varutepsa nota3 = 90;
+
+varutepsa promedio = (nota1 + nota2 + nota3) / 3;
+
+printbecas(promedio);
+
+ifapruebemeinge (promedio >= 51) {
+    printbecas("Materia aprobada con exito");
+} elsenomerepruebe {
+    printbecas("Reprobado, debe inscribir mesa examinadora");
+}

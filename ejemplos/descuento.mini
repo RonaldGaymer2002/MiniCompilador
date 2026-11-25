@@ -1,0 +1,12 @@
+// Ejemplo 3: Calculo comercial de descuentos
+varutepsa precio = 200;
+varutepsa descuento = 50;
+varutepsa total = precio - descuento;
+
+printbecas(total);
+
+ifapruebemeinge (total <= 150) {
+    printbecas("Aplica tarifa especial");
+} elsenomerepruebe {
+    printbecas("Tarifa estandar");
+}

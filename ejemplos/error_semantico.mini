@@ -1,0 +1,9 @@
+// Ejemplo 4: Demostracion de error semantico para la defensa
+// El docente puede ver como el compilador rechaza tipos incompatibles antes de traducir.
+
+varutepsa nota = 100;
+
+// ERROR: Sumar un numero con una cadena de texto
+varutepsa calculoInvalido = nota + "puntos_extra";
+
+printbecas(calculoInvalido);
