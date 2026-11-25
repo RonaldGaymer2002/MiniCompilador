@@ -73,6 +73,7 @@ minicompilador/
 ├── main.py             # Punto de entrada principal y orquestador del pipeline
 ├── semantic.py         # Análisis semántico, validación de tipos y tabla de símbolos
 ├── translator.py       # Generador de código fuente hacia Python
+├── requirements.txt    # Dependencias del proyecto (lark)
 ├── salida.py           # Código Python resultante generado tras compilar
 │
 ├── ejemplos/
@@ -83,45 +84,44 @@ minicompilador/
 
 ---
 
-## 🚀 Requisitos e Instalación
+## ⚡ Guía Paso a Paso para Probar el Proyecto
 
-### Requisitos previos
-- **Python 3.8 o superior**
+Sigue estos sencillos pasos para clonar, configurar y ejecutar el proyecto en tu computadora:
 
-### Instalación de dependencias
-El proyecto utiliza la librería `lark` para el análisis sintáctico:
-
+### Paso 1: Clonar el repositorio
 ```bash
-pip install lark
+git clone https://github.com/RonaldGaymer2002/MiniCompilador.git
+cd MiniCompilador
 ```
 
-*(Si utilizas el entorno virtual existente en la carpeta `venv`, activa el entorno antes de ejecutar).*
+### Paso 2: Crear y activar un entorno virtual
 
----
+**En Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+*(Si no tienes permisos para activar scripts en PowerShell, puedes usar directamente el comando `.\.venv\Scripts\python.exe` en los siguientes pasos).*
 
-## 💻 Guía de Uso
-
-### 1. Escribir un archivo con código `.mini`
-Ejemplo (`ejemplos/edades.mini`):
-
-```javascript
-varutepsa edad = 22;
-
-ifapruebemeinge (edad >= 18) {
-    printbecas("Estas aprobado");
-} elsenomerepruebe {
-    printbecas("Estas reprobado");
-}
+**En Linux / macOS:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 2. Compilar el programa
-Ejecuta `main.py` pasando como argumento la ruta del archivo `.mini`:
+### Paso 3: Instalar las dependencias
+Instala la librería `lark` con un solo comando:
+```bash
+pip install -r requirements.txt
+```
 
+### Paso 4: Compilar el archivo de ejemplo
+Ejecuta el compilador indicando el archivo `.mini` que deseas traducir:
 ```bash
 python main.py ejemplos/edades.mini
 ```
 
-### 3. Salida esperada en consola
+**Salida en consola:**
 ```text
 1. Analisis sintactico: Correcto
 Analisis semantico correcto
@@ -141,11 +141,15 @@ else:
 Archivo salida.py generado correctamente.
 ```
 
-### 4. Ejecutar el código generado
-Una vez creado `salida.py`, puedes ejecutarlo directamente con Python:
-
+### Paso 5: Ejecutar el código Python generado
+Verifica que el programa final funciona ejecutando el archivo generado:
 ```bash
 python salida.py
+```
+
+**Resultado obtenido:**
+```text
+Estas aprobado
 ```
 
 ---
